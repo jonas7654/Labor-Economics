@@ -1,2 +1,359 @@
-# Labor-Economics 2020
- PS2 with R
+---
+title: "PS_2_PDF"
+author: "Jonas Veit"
+date: "3/21/2020"
+output: pdf_document
+---
+\
+\
+\
+
+# 1) Estimating the intensive margin labor supply elasticity
+
+\
+\
+\
+Load helpful packages and the cps dataset
+```{r setup, include=TRUE, message=FALSE}
+library(tidyverse)
+library(haven)
+
+cps = read_dta(file = '~/Documents/Programming/R/Labor Economics [2020]//Data for PS2/cps-1984-2010.dta')
+
+```
+\
+\
+\
+
+### $a)$
+```{r}
+summary(cps)
+```
+
+```{r,message=FALSE}
+mean(cps$nKids)
+mean(cps$hisp)
+```
+The average number of childen is $0.653$
+
+The share of hispanic women in this data is $15.5$%
+\
+\
+\
+
+### $b)$
+```{r , message=FALSE}
+hourly_wage = cps$incwage / (52*cps$uhrswork)
+
+mean(hourly_wage,na.rm = TRUE)
+sd(hourly_wage,na.rm = TRUE)
+```
+Since there are NaN's in our hourly wage vector we have to use **na.rm = TRUE**
+\
+\
+$mean(hourly\_wage) = 10.091$
+\
+\
+$sd(houry\_wage) = 13.277$
+\
+\
+There are missing values because the column $uhrswork$ contains zero rows.
+\
+Dividing by zero produces NaN's. You can calculate the amount of zeros by executing the following command.
+```{r}
+sum(cps$uhrswork == 0)
+```
+Compare it with the number of NaN's in the $hourly\_wage$ vector.
+```{r}
+sum(hourly_wage == 'NaN')
+```
+\
+\
+\
+
+### $c)$
+```{r}
+mean(cps$emp_ind)
+mean(cps$emp_ind[cps$nKids == 0])
+mean(cps$emp_ind[cps$nKids == 1 & 2])
+
+```
+The overall rate of labor force participation is or $74.41$%
+\
+\
+The rate of labor force participation among women who have no children is or $78.59$%
+\
+\
+The rate for 1 or 2 children is or $71.78$%
+\
+\
+The rate of labor force participation among women with 10 children is very high because of the amount of women who have 10 children.
+```{r}
+cps %>% 
+  filter(nKids == 10) %>%
+  select(emp_ind)
+
+```
+we can clearly see that there are just 10 women with 10 children in this dataset and 6 of them are participating in the labor force i.e $60$%
+\
+\
+\
+
+### $d)$
+\
+
+we want to estimate the model $$\textrm{uhrswork}_i = \beta_0 + \beta_1 \textrm{wage}_i + \varepsilon_i$$
+```{r}
+regression1 = lm(cps$uhrswork ~ hourly_wage);regression1
+sum_reg1 = summary(regression1);summary(regression1)[4]
+```
+The estimate for $\hat{\beta}_1$ is $0.06117$
+\
+\
+The standard error for $\hat{\beta}_1$ is $0.0014$ and the t-statistic is $41.20$
+\
+We can see that $Pr(>|t|)$ is $0$ that means our p value is 0
+\
+\
+According to the estimated $\hat{\beta}_1$ an one dollar increase in wage should result in an increase of hours worked of 0.0611
+\
+\
+Now estimate the elasticity of hours worked with respect to wage
+```{r}
+avg_hourly_wage = mean(hourly_wage,na.rm = TRUE)
+avg_uhrswork = mean(cps$uhrswork)
+regression1$coefficients[2]*(avg_hourly_wage/avg_uhrswork)
+```
+
+The estimated elasticity $e$ is equal to $0.0199$
+\
+\
+\
+
+### $e)$
+\
+Now we want to estimate the log regression $$\log(\textrm{uhrswork}_i) = \beta_0 + \beta_1 \log(\textrm{wage}_i) + \varepsilon_i$$
+```{r}
+log_uhrswork = log(cps$uhrswork)
+log_wage = log(hourly_wage)
+log_regression1 = lm(log_uhrswork ~ log_wage);log_regression1
+sum_logreg1 = summary(log_regression1);sum_logreg1[4]
+```
+The estimate for $\hat{\beta}_1$ is $0.08245$
+\
+\
+The standard error for $\hat{\beta}_1$ is $0.00069$ and the t-statistic is $119.2211$
+\
+We can see that $Pr(>|t|)$ is $0$ that means our p value is 0
+\
+\
+$e_{reg1} = 0.01992475$ \ vs. \ $e_{log(reg1)} = 0.08245$
+\
+\
+If the wage increases by $10$% we would estimate the effect on hours worked to be $10 \times 0.08245 = 0.8245$
+\
+\
+\
+
+### $f)$
+\
+I am combining $log\_wage$ and $age$ into one dataframe for easier usage.
+\
+$log\_hours$ contains NaN's that means that we have to use the command: **use = 'complete.obs'**
+```{r}
+cov_dataframe = data.frame(log_wage,cps$age)
+cov(cov_dataframe,use = 'complete.obs')
+0.0053*(cov(log_wage,cps$age,use = 'complete.obs')/var(log_wage,na.rm = TRUE))
+```
+\
+$$OVB = \beta_{age} \frac{Cov(log\_wage,age)}{\tilde{S}^2_{log\_wage}} = 0.0053 \frac{2.219}{0.997} = 0.012$$
+\
+We estimate the OVB to be around 0.012 i.e a elasticity change of 0.012
+\
+\
+\
+
+### $g)$
+\
+$$\hat{\beta} = \beta + \beta_{age} \frac{Cov(log\_wage,age)}{\tilde{S}^2_{log\_wage}} \Leftrightarrow \beta = \hat{\beta} -  \beta_{age} \frac{Cov(age,log\_wage)}{\tilde{S}^2_{log\_wage}} = 0.08245 - 0.012 = 0.07045$$
+\
+\
+\
+
+### $h)$
+\
+We want to estimate the model
+\
+$$\log(\textrm{uhrswork}_i) = \beta_0 + \beta_1 \log(\textrm{wage}_i) +\beta_2\textrm{edu_years} + \beta_3\textrm{age} + \beta_4 \textrm{age}^2 + \beta_5 \textrm{year} + \beta_6 \textrm{hisp} + \varepsilon_i$$
+```{r}
+age_squared = cps$age^2
+log_regression2 = lm(data = cps,formula = log_uhrswork ~ log_wage + edu_yrs + age + age_squared + year + hisp);log_regression2
+```
+\
+The estimated labor supply elasticity does not stay the same. We are now controlling for other variables. Therefore we are able to adress the omitted variable bias.
+\
+\
+\
+
+### $i)$
+\
+Here we create a new DataFrame with all women with no childen which we access in the $lm()$ command.
+\
+*** Moreover we create new vectors for $\log(wage)$ , $\log(uhrswork)$ and $\textrm{age}^2$ conditioned on $nKids == 0$
+\
+Note that I used a different approach to create the DataFrame and vectors using the package 'dplyr' which belongs to the 'tidyverse' package that we loaded at the beginning
+\
+\
+We could have also used the following base-R commands:
+\
+$$\textrm{cps_nochildren = cps \$ [cps \$ nKids == 0,]}$$
+\
+\
+$$\textrm{log_wage_nochildren} = \log(\textrm{cps_nochildren \$ incwage / (52*cps_nochildren \$ uhrswork}))$$
+\
+$$...$$
+\
+\
+But using 'dplyr' makes the code much easier to read!
+\
+```{r}
+cps_nochildren = cps %>%
+  filter(nKids == 0)
+
+log_wage_nochildren = cps %>%
+  filter(nKids == 0) %>%
+  select(incwage,uhrswork) %>%
+  transmute(log(incwage/(52*uhrswork))) %>%
+  pull()
+
+
+log_uhrswork_nochildren = cps %>%
+  filter(nKids == 0) %>%
+  select(uhrswork) %>%
+  transmute(log(uhrswork)) %>%
+  pull()
+
+age_squared_nochildren = cps_nochildren %>%
+  select(age) %>%
+  transmute(age^2) %>%
+  pull()
+
+```
+
+
+```{r}
+log_regression_nochildren = lm(data = cps_nochildren,formula = log_uhrswork_nochildren ~ log_wage_nochildren + edu_yrs + age + age_squared_nochildren + year + hisp);log_regression_nochildren
+```
+\
+```{r}
+cps_children = cps %>%
+  filter(nKids > 1)
+
+log_wage_children = cps %>%
+  filter(nKids > 1) %>%
+  select(incwage,uhrswork) %>%
+  transmute(log(incwage/(52*uhrswork))) %>%
+  pull()
+
+
+log_uhrswork_children = cps %>%
+  filter(nKids > 1) %>%
+  select(uhrswork) %>%
+  transmute(log(uhrswork)) %>%
+  pull()
+
+age_squared_children = cps_children %>%
+  select(age) %>%
+  transmute(age^2) %>%
+  pull()
+```
+
+```{r}
+log_regression_children = lm(data = cps_children,formula = log_uhrswork_children ~ log_wage_children + edu_yrs + age + age_squared_children + year + hisp);log_regression_children
+```
+\
+\
+\
+
+### $j)$
+\
+```{r}
+
+```
+\
+\
+\
+\
+\
+
+# 2) Estimating the Effect of Minimum Wages
+\
+\
+Load the corresponding dataset.
+\
+I have also removed all other variables created for Part 1 of this Problem Set to have a cleaner workspace.
+\
+```{r}
+rm(list = ls())
+
+empdata_minwage = read_dta(file = "~/Documents/Programming/R/Labor Economics [2020]//Data for PS2/dubelesterreich_empdata_contig_minwage.dta")
+```
+\
+\
+\
+
+### $a)$
+\
+\
+Equation $(1)$ in the Dube, Lester and Reich article is the following
+\
+\
+$$\ln_{it} = \alpha + \eta\ln(MW_{it}) + \delta\ln(y_{it})^{TOT} + \gamma\ln(pop_{it}) + \phi_i + \tau_t + \varepsilon_{it}$$
+\
+\
+\
+First we want to estimate
+\
+\
+
+$$\log(\textrm{earnings_rest}) = \alpha + \eta\log(\textrm{minwage}) + \delta\log(\textrm{earnings_tot}) + \varepsilon_{it}$$
+\
+```{r}
+log_regression1 = lm(data = empdata_minwage, formula = logearnings_rest ~ logminwage + logearnings_tot);log_regression1
+
+summary(log_regression1)[4]
+```
+\
+$\hat{\eta} = 0.5042$
+\
+\
+The coefficient is statistically significant with a t-value of $94.46$ and a p-value of $0$
+\
+\
+\
+
+### $b)$
+\
+```{r}
+attach(empdata_minwage)
+
+period = empdata_minwage %>%
+  select(period)
+
+dummy_dataframe = as.data.frame(matrix(nrow = length(t(period)),ncol = length(min(period):max(period))))
+colnames(dummy_dataframe) = paste("period",1:length(dummy_dataframe),sep = "")
+
+
+for (i in 1:length(min(period):max(period))){
+   k = (i + min(period) -1)
+   period_dummy = paste("period",i,sep = "")
+   dummy_dataframe[,i] = (assign(period_dummy,as.numeric(period == k))) 
+}
+
+
+
+lm(data = dummy_dataframe,formula = logearnings_rest ~ logminwage + logearnings_tot + .)
+```
+
+
+
