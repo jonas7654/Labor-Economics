@@ -1,0 +1,827 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={PS\_2\_PDF},
+  pdfauthor={Jonas Veit},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{PS\_2\_PDF}
+\author{Jonas Veit}
+\date{3/21/2020}
+
+\begin{document}
+\maketitle
+
+\hfill\break
+\hfill\break
+\hfill\break
+
+\hypertarget{estimating-the-intensive-margin-labor-supply-elasticity}{%
+\section{1) Estimating the intensive margin labor supply
+elasticity}\label{estimating-the-intensive-margin-labor-supply-elasticity}}
+
+\hfill\break
+\hfill\break
+\hfill\break
+Load helpful packages and the cps dataset
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(haven)}
+
+\NormalTok{cps =}\StringTok{ }\KeywordTok{read\_dta}\NormalTok{(}\DataTypeTok{file =} \StringTok{\textquotesingle{}\textasciitilde{}/Documents/Programming/R/Labor Economics [2020]//Data for PS2/cps{-}1984{-}2010.dta\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hfill\break
+\hfill\break
+\hfill\break
+
+\hypertarget{a}{%
+\subsubsection{\texorpdfstring{\(a)\)}{a)}}\label{a}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(cps)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       year         statefip         metro            age           hrswork    
+##  Min.   :1984   Min.   : 1.00   Min.   :0.000   Min.   :16.00   Min.   : 0.0  
+##  1st Qu.:1991   1st Qu.:12.00   1st Qu.:2.000   1st Qu.:24.00   1st Qu.: 0.0  
+##  Median :1999   Median :27.00   Median :2.000   Median :29.00   Median :37.0  
+##  Mean   :1998   Mean   :27.48   Mean   :2.408   Mean   :29.92   Mean   :27.5  
+##  3rd Qu.:2005   3rd Qu.:39.00   3rd Qu.:3.000   3rd Qu.:36.00   3rd Qu.:40.0  
+##  Max.   :2010   Max.   :56.00   Max.   :4.000   Max.   :44.00   Max.   :99.0  
+##                                                                               
+##     uhrswork        incwage           nKids             mstat  
+##  Min.   : 0.00   Min.   :     0   Min.   : 0.0000   Min.   :1  
+##  1st Qu.:20.00   1st Qu.:  2430   1st Qu.: 0.0000   1st Qu.:1  
+##  Median :40.00   Median : 12016   Median : 0.0000   Median :1  
+##  Mean   :30.98   Mean   : 16715   Mean   : 0.6537   Mean   :1  
+##  3rd Qu.:40.00   3rd Qu.: 24000   3rd Qu.: 1.0000   3rd Qu.:1  
+##  Max.   :99.00   Max.   :713263   Max.   :12.0000   Max.   :1  
+##                                                                
+##    avgtax_15k         emp_ind          edu_yrs          hsDrop    
+##  Min.   :-0.3804   Min.   :0.0000   Min.   : 1.00   Min.   :0.00  
+##  1st Qu.: 0.0000   1st Qu.:0.0000   1st Qu.:12.00   1st Qu.:0.00  
+##  Median : 0.0000   Median :1.0000   Median :12.00   Median :0.00  
+##  Mean   : 0.1347   Mean   :0.7442   Mean   :12.95   Mean   :0.15  
+##  3rd Qu.: 0.2404   3rd Qu.:1.0000   3rd Qu.:14.00   3rd Qu.:0.00  
+##  Max.   : 0.7400   Max.   :1.0000   Max.   :20.00   Max.   :1.00  
+##  NA's   :1763                                                     
+##      hsGrad          bachelor         advanced            hisp       
+##  Min.   :0.0000   Min.   :0.0000   Min.   :0.00000   Min.   :0.0000  
+##  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.00000   1st Qu.:0.0000  
+##  Median :0.0000   Median :0.0000   Median :0.00000   Median :0.0000  
+##  Mean   :0.3531   Mean   :0.1594   Mean   :0.05592   Mean   :0.1552  
+##  3rd Qu.:1.0000   3rd Qu.:0.0000   3rd Qu.:0.00000   3rd Qu.:0.0000  
+##  Max.   :1.0000   Max.   :1.0000   Max.   :1.00000   Max.   :1.0000  
+##                                                                      
+##     nonwhite     
+##  Min.   :0.0000  
+##  1st Qu.:0.0000  
+##  Median :0.0000  
+##  Mean   :0.2557  
+##  3rd Qu.:1.0000  
+##  Max.   :1.0000  
+## 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(cps}\OperatorTok{$}\NormalTok{nKids)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.6536786
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(cps}\OperatorTok{$}\NormalTok{hisp)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1551964
+\end{verbatim}
+
+The average number of childen is \(0.653\)
+
+The share of hispanic women in this data is \(15.5\)\%\\
+~\\
+~\\
+
+\hypertarget{b}{%
+\subsubsection{\texorpdfstring{\(b)\)}{b)}}\label{b}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hourly\_wage =}\StringTok{ }\NormalTok{cps}\OperatorTok{$}\NormalTok{incwage }\OperatorTok{/}\StringTok{ }\NormalTok{(}\DecValTok{52}\OperatorTok{*}\NormalTok{cps}\OperatorTok{$}\NormalTok{uhrswork)}
+
+\KeywordTok{mean}\NormalTok{(hourly\_wage,}\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10.09143
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sd}\NormalTok{(hourly\_wage,}\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 13.27755
+\end{verbatim}
+
+Since there are NaN's in our hourly wage vector we have to use
+\textbf{na.rm = TRUE}\\
+~\\
+\(mean(hourly\_wage) = 10.091\)\\
+~\\
+\(sd(houry\_wage) = 13.277\)\\
+~\\
+There are missing values because the column \(uhrswork\) contains zero
+rows.\\
+Dividing by zero produces NaN's. You can calculate the amount of zeros
+by executing the following command.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sum}\NormalTok{(cps}\OperatorTok{$}\NormalTok{uhrswork }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 55727
+\end{verbatim}
+
+Compare it with the number of NaN's in the \(hourly\_wage\) vector.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sum}\NormalTok{(hourly\_wage }\OperatorTok{==}\StringTok{ \textquotesingle{}NaN\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 55727
+\end{verbatim}
+
+\hfill\break
+\hfill\break
+\hfill\break
+
+\hypertarget{c}{%
+\subsubsection{\texorpdfstring{\(c)\)}{c)}}\label{c}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(cps}\OperatorTok{$}\NormalTok{emp\_ind)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7441964
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(cps}\OperatorTok{$}\NormalTok{emp\_ind[cps}\OperatorTok{$}\NormalTok{nKids }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7859709
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(cps}\OperatorTok{$}\NormalTok{emp\_ind[cps}\OperatorTok{$}\NormalTok{nKids }\OperatorTok{==}\StringTok{ }\DecValTok{1} \OperatorTok{\&}\StringTok{ }\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7178345
+\end{verbatim}
+
+The overall rate of labor force participation is or \(74.41\)\%\\
+~\\
+The rate of labor force participation among women who have no children
+is or \(78.59\)\%\\
+~\\
+The rate for 1 or 2 children is or \(71.78\)\%\\
+~\\
+The rate of labor force participation among women with 10 children is
+very high because of the amount of women who have 10 children.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cps }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(nKids }\OperatorTok{==}\StringTok{ }\DecValTok{10}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(emp\_ind)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 10 x 1
+##    emp_ind
+##      <dbl>
+##  1       1
+##  2       0
+##  3       1
+##  4       0
+##  5       1
+##  6       0
+##  7       1
+##  8       1
+##  9       1
+## 10       0
+\end{verbatim}
+
+we can clearly see that there are just 10 women with 10 children in this
+dataset and 6 of them are participating in the labor force i.e
+\(60\)\%\\
+~\\
+~\\
+
+\hypertarget{d}{%
+\subsubsection{\texorpdfstring{\(d)\)}{d)}}\label{d}}
+
+\hfill\break
+
+we want to estimate the model
+\[\textrm{uhrswork}_i = \beta_0 + \beta_1 \textrm{wage}_i + \varepsilon_i\]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{regression1 =}\StringTok{ }\KeywordTok{lm}\NormalTok{(cps}\OperatorTok{$}\NormalTok{uhrswork }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{hourly\_wage);regression1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = cps$uhrswork ~ hourly_wage)
+## 
+## Coefficients:
+## (Intercept)  hourly_wage  
+##    37.30545      0.06117
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sum\_reg1 =}\StringTok{ }\KeywordTok{summary}\NormalTok{(regression1);}\KeywordTok{summary}\NormalTok{(regression1)[}\DecValTok{4}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $coefficients
+##                Estimate  Std. Error    t value Pr(>|t|)
+## (Intercept) 37.30545282 0.024755393 1506.96265        0
+## hourly_wage  0.06116711 0.001484384   41.20706        0
+\end{verbatim}
+
+The estimate for \(\hat{\beta}_1\) is \(0.06117\)\\
+~\\
+The standard error for \(\hat{\beta}_1\) is \(0.0014\) and the
+t-statistic is \(41.20\)\\
+We can see that \(Pr(>|t|)\) is \(0\) that means our p value is 0\\
+~\\
+According to the estimated \(\hat{\beta}_1\) an one dollar increase in
+wage should result in an increase of hours worked of 0.0611\\
+~\\
+Now estimate the elasticity of hours worked with respect to wage
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{avg\_hourly\_wage =}\StringTok{ }\KeywordTok{mean}\NormalTok{(hourly\_wage,}\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{avg\_uhrswork =}\StringTok{ }\KeywordTok{mean}\NormalTok{(cps}\OperatorTok{$}\NormalTok{uhrswork)}
+\NormalTok{regression1}\OperatorTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{]}\OperatorTok{*}\NormalTok{(avg\_hourly\_wage}\OperatorTok{/}\NormalTok{avg\_uhrswork)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## hourly_wage 
+##  0.01992475
+\end{verbatim}
+
+The estimated elasticity \(e\) is equal to \(0.0199\)\\
+~\\
+~\\
+
+\hypertarget{e}{%
+\subsubsection{\texorpdfstring{\(e)\)}{e)}}\label{e}}
+
+\hfill\break
+Now we want to estimate the log regression
+\[\log(\textrm{uhrswork}_i) = \beta_0 + \beta_1 \log(\textrm{wage}_i) + \varepsilon_i\]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{log\_uhrswork =}\StringTok{ }\KeywordTok{log}\NormalTok{(cps}\OperatorTok{$}\NormalTok{uhrswork)}
+\NormalTok{log\_wage =}\StringTok{ }\KeywordTok{log}\NormalTok{(hourly\_wage)}
+\NormalTok{log\_regression1 =}\StringTok{ }\KeywordTok{lm}\NormalTok{(log\_uhrswork }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{log\_wage);log\_regression1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = log_uhrswork ~ log_wage)
+## 
+## Coefficients:
+## (Intercept)     log_wage  
+##     3.42886      0.08245
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sum\_logreg1 =}\StringTok{ }\KeywordTok{summary}\NormalTok{(log\_regression1);sum\_logreg1[}\DecValTok{4}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $coefficients
+##               Estimate   Std. Error   t value Pr(>|t|)
+## (Intercept) 3.42886100 0.0015026129 2281.9324        0
+## log_wage    0.08245064 0.0006915774  119.2211        0
+\end{verbatim}
+
+The estimate for \(\hat{\beta}_1\) is \(0.08245\)\\
+~\\
+The standard error for \(\hat{\beta}_1\) is \(0.00069\) and the
+t-statistic is \(119.2211\)\\
+We can see that \(Pr(>|t|)\) is \(0\) that means our p value is 0\\
+~\\
+\(e_{reg1} = 0.01992475\) ~vs.~~\(e_{log(reg1)} = 0.08245\)\\
+~\\
+If the wage increases by \(10\)\% we would estimate the effect on hours
+worked to be \(10 \times 0.08245 = 0.8245\)\\
+~\\
+~\\
+
+\hypertarget{f}{%
+\subsubsection{\texorpdfstring{\(f)\)}{f)}}\label{f}}
+
+\hfill\break
+I am combining \(log\_wage\) and \(age\) into one dataframe for easier
+usage.\\
+\(log\_hours\) contains NaN's that means that we have to use the
+command: \textbf{use = `complete.obs'}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cov\_dataframe =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(log\_wage,cps}\OperatorTok{$}\NormalTok{age)}
+\KeywordTok{cov}\NormalTok{(cov\_dataframe,}\DataTypeTok{use =} \StringTok{\textquotesingle{}complete.obs\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           log_wage   cps.age
+## log_wage 0.9775908  2.219258
+## cps.age  2.2192582 55.105299
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FloatTok{0.0053}\OperatorTok{*}\NormalTok{(}\KeywordTok{cov}\NormalTok{(log\_wage,cps}\OperatorTok{$}\NormalTok{age,}\DataTypeTok{use =} \StringTok{\textquotesingle{}complete.obs\textquotesingle{}}\NormalTok{)}\OperatorTok{/}\KeywordTok{var}\NormalTok{(log\_wage,}\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.01203169
+\end{verbatim}
+
+\hfill\break
+\[OVB = \beta_{age} \frac{Cov(log\_wage,age)}{\tilde{S}^2_{log\_wage}} = 0.0053 \frac{2.219}{0.997} = 0.012\]\\
+We estimate the OVB to be around 0.012 i.e a elasticity change of
+0.012\\
+~\\
+~\\
+
+\hypertarget{g}{%
+\subsubsection{\texorpdfstring{\(g)\)}{g)}}\label{g}}
+
+\hfill\break
+\[\hat{\beta} = \beta + \beta_{age} \frac{Cov(log\_wage,age)}{\tilde{S}^2_{log\_wage}} \Leftrightarrow \beta = \hat{\beta} -  \beta_{age} \frac{Cov(age,log\_wage)}{\tilde{S}^2_{log\_wage}} = 0.08245 - 0.012 = 0.07045\]\\
+~\\
+~\\
+
+\hypertarget{h}{%
+\subsubsection{\texorpdfstring{\(h)\)}{h)}}\label{h}}
+
+\hfill\break
+We want to estimate the model\\
+\[\log(\textrm{uhrswork}_i) = \beta_0 + \beta_1 \log(\textrm{wage}_i) +\beta_2\textrm{edu_years} + \beta_3\textrm{age} + \beta_4 \textrm{age}^2 + \beta_5 \textrm{year} + \beta_6 \textrm{hisp} + \varepsilon_i\]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{age\_squared =}\StringTok{ }\NormalTok{cps}\OperatorTok{$}\NormalTok{age}\OperatorTok{\^{}}\DecValTok{2}
+\NormalTok{log\_regression2 =}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cps,}\DataTypeTok{formula =}\NormalTok{ log\_uhrswork }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{log\_wage }\OperatorTok{+}\StringTok{ }\NormalTok{edu\_yrs }\OperatorTok{+}\StringTok{ }\NormalTok{age }\OperatorTok{+}\StringTok{ }\NormalTok{age\_squared }\OperatorTok{+}\StringTok{ }\NormalTok{year }\OperatorTok{+}\StringTok{ }\NormalTok{hisp);log\_regression2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = log_uhrswork ~ log_wage + edu_yrs + age + age_squared + 
+##     year + hisp, data = cps)
+## 
+## Coefficients:
+## (Intercept)     log_wage      edu_yrs          age  age_squared         year  
+##   8.0283921    0.0659372    0.0069349    0.0412828   -0.0005755   -0.0026781  
+##        hisp  
+##   0.0096460
+\end{verbatim}
+
+\hfill\break
+The estimated labor supply elasticity does not stay the same. We are now
+controlling for other variables. Therefore we are able to adress the
+omitted variable bias.\\
+~\\
+~\\
+
+\hypertarget{i}{%
+\subsubsection{\texorpdfstring{\(i)\)}{i)}}\label{i}}
+
+\hfill\break
+Here we create a new DataFrame with all women with no childen which we
+access in the \(lm()\) command.\\
+*** Moreover we create new vectors for \(\log(wage)\) ,
+\(\log(uhrswork)\) and \(\textrm{age}^2\) conditioned on
+\(nKids == 0\)\\
+Note that I used a different approach to create the DataFrame and
+vectors using the package `dplyr' which belongs to the `tidyverse'
+package that we loaded at the beginning\\
+~\\
+We could have also used the following base-R commands:\\
+\[\textrm{cps_nochildren = cps \$ [cps \$ nKids == 0,]}\]\\
+~\\
+\[\textrm{log_wage_nochildren} = \log(\textrm{cps_nochildren \$ incwage / (52*cps_nochildren \$ uhrswork}))\]\\
+\[...\]\\
+~\\
+But using `dplyr' makes the code much easier to read!\\
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cps\_nochildren =}\StringTok{ }\NormalTok{cps }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(nKids }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{)}
+
+\NormalTok{log\_wage\_nochildren =}\StringTok{ }\NormalTok{cps }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(nKids }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(incwage,uhrswork) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{transmute}\NormalTok{(}\KeywordTok{log}\NormalTok{(incwage}\OperatorTok{/}\NormalTok{(}\DecValTok{52}\OperatorTok{*}\NormalTok{uhrswork))) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{pull}\NormalTok{()}
+
+
+\NormalTok{log\_uhrswork\_nochildren =}\StringTok{ }\NormalTok{cps }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(nKids }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(uhrswork) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{transmute}\NormalTok{(}\KeywordTok{log}\NormalTok{(uhrswork)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{pull}\NormalTok{()}
+
+\NormalTok{age\_squared\_nochildren =}\StringTok{ }\NormalTok{cps\_nochildren }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(age) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{transmute}\NormalTok{(age}\OperatorTok{\^{}}\DecValTok{2}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{pull}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{log\_regression\_nochildren =}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cps\_nochildren,}\DataTypeTok{formula =}\NormalTok{ log\_uhrswork\_nochildren }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{log\_wage\_nochildren }\OperatorTok{+}\StringTok{ }\NormalTok{edu\_yrs }\OperatorTok{+}\StringTok{ }\NormalTok{age }\OperatorTok{+}\StringTok{ }\NormalTok{age\_squared\_nochildren }\OperatorTok{+}\StringTok{ }\NormalTok{year }\OperatorTok{+}\StringTok{ }\NormalTok{hisp);log\_regression\_nochildren}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = log_uhrswork_nochildren ~ log_wage_nochildren + 
+##     edu_yrs + age + age_squared_nochildren + year + hisp, data = cps_nochildren)
+## 
+## Coefficients:
+##            (Intercept)     log_wage_nochildren                 edu_yrs  
+##              7.5427277               0.0609923               0.0057563  
+##                    age  age_squared_nochildren                    year  
+##              0.0520038              -0.0007289              -0.0025045  
+##                   hisp  
+##              0.0088666
+\end{verbatim}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cps\_children =}\StringTok{ }\NormalTok{cps }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(nKids }\OperatorTok{\textgreater{}}\StringTok{ }\DecValTok{1}\NormalTok{)}
+
+\NormalTok{log\_wage\_children =}\StringTok{ }\NormalTok{cps }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(nKids }\OperatorTok{\textgreater{}}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(incwage,uhrswork) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{transmute}\NormalTok{(}\KeywordTok{log}\NormalTok{(incwage}\OperatorTok{/}\NormalTok{(}\DecValTok{52}\OperatorTok{*}\NormalTok{uhrswork))) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{pull}\NormalTok{()}
+
+
+\NormalTok{log\_uhrswork\_children =}\StringTok{ }\NormalTok{cps }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(nKids }\OperatorTok{\textgreater{}}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(uhrswork) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{transmute}\NormalTok{(}\KeywordTok{log}\NormalTok{(uhrswork)) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{pull}\NormalTok{()}
+
+\NormalTok{age\_squared\_children =}\StringTok{ }\NormalTok{cps\_children }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(age) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{transmute}\NormalTok{(age}\OperatorTok{\^{}}\DecValTok{2}\NormalTok{) }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{pull}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{log\_regression\_children =}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cps\_children,}\DataTypeTok{formula =}\NormalTok{ log\_uhrswork\_children }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{log\_wage\_children }\OperatorTok{+}\StringTok{ }\NormalTok{edu\_yrs }\OperatorTok{+}\StringTok{ }\NormalTok{age }\OperatorTok{+}\StringTok{ }\NormalTok{age\_squared\_children }\OperatorTok{+}\StringTok{ }\NormalTok{year }\OperatorTok{+}\StringTok{ }\NormalTok{hisp);log\_regression\_children}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = log_uhrswork_children ~ log_wage_children + edu_yrs + 
+##     age + age_squared_children + year + hisp, data = cps_children)
+## 
+## Coefficients:
+##          (Intercept)     log_wage_children               edu_yrs  
+##            6.6743797             0.0682655             0.0042289  
+##                  age  age_squared_children                  year  
+##            0.0152948            -0.0001984            -0.0017839  
+##                 hisp  
+##            0.0142629
+\end{verbatim}
+
+\hfill\break
+\hfill\break
+\hfill\break
+
+\hypertarget{j}{%
+\subsubsection{\texorpdfstring{\(j)\)}{j)}}\label{j}}
+
+\hfill\break
+
+\hfill\break
+\hfill\break
+\hfill\break
+\hfill\break
+\hfill\break
+
+\hypertarget{estimating-the-effect-of-minimum-wages}{%
+\section{2) Estimating the Effect of Minimum
+Wages}\label{estimating-the-effect-of-minimum-wages}}
+
+\hfill\break
+\hfill\break
+Load the corresponding dataset.\\
+I have also removed all other variables created for Part 1 of this
+Problem Set to have a cleaner workspace.\\
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list =} \KeywordTok{ls}\NormalTok{())}
+
+\NormalTok{empdata\_minwage =}\StringTok{ }\KeywordTok{read\_dta}\NormalTok{(}\DataTypeTok{file =} \StringTok{"\textasciitilde{}/Documents/Programming/R/Labor Economics [2020]//Data for PS2/dubelesterreich\_empdata\_contig\_minwage.dta"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hfill\break
+\hfill\break
+\hfill\break
+
+\hypertarget{a-1}{%
+\subsubsection{\texorpdfstring{\(a)\)}{a)}}\label{a-1}}
+
+\hfill\break
+\hfill\break
+Equation \((1)\) in the Dube, Lester and Reich article is the
+following\\
+~\\
+\[\ln_{it} = \alpha + \eta\ln(MW_{it}) + \delta\ln(y_{it})^{TOT} + \gamma\ln(pop_{it}) + \phi_i + \tau_t + \varepsilon_{it}\]\\
+~\\
+~\\
+First we want to estimate\\
+~\\
+
+\[\log(\textrm{earnings_rest}) = \alpha + \eta\log(\textrm{minwage}) + \delta\log(\textrm{earnings_tot}) + \varepsilon_{it}\]\\
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{log\_regression1 =}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ empdata\_minwage, }\DataTypeTok{formula =}\NormalTok{ logearnings\_rest }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{logminwage }\OperatorTok{+}\StringTok{ }\NormalTok{logearnings\_tot);log\_regression1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = logearnings_rest ~ logminwage + logearnings_tot, 
+##     data = empdata_minwage)
+## 
+## Coefficients:
+##     (Intercept)       logminwage  logearnings_tot  
+##          0.9147           0.5042           0.5542
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(log\_regression1)[}\DecValTok{4}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $coefficients
+##                  Estimate  Std. Error   t value Pr(>|t|)
+## (Intercept)     0.9147217 0.013707810  66.72997        0
+## logminwage      0.5041512 0.005336642  94.46974        0
+## logearnings_tot 0.5542416 0.002657709 208.54109        0
+\end{verbatim}
+
+\hfill\break
+\(\hat{\eta} = 0.5042\)\\
+~\\
+The coefficient is statistically significant with a t-value of \(94.46\)
+and a p-value of \(0\)\\
+~\\
+~\\
+
+\hypertarget{b-1}{%
+\subsubsection{\texorpdfstring{\(b)\)}{b)}}\label{b-1}}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{attach}\NormalTok{(empdata\_minwage)}
+
+\NormalTok{period =}\StringTok{ }\NormalTok{empdata\_minwage }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(period)}
+
+\NormalTok{dummy\_dataframe =}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{matrix}\NormalTok{(}\DataTypeTok{nrow =} \KeywordTok{length}\NormalTok{(}\KeywordTok{t}\NormalTok{(period)),}\DataTypeTok{ncol =} \KeywordTok{length}\NormalTok{(}\KeywordTok{min}\NormalTok{(period)}\OperatorTok{:}\KeywordTok{max}\NormalTok{(period))))}
+\KeywordTok{colnames}\NormalTok{(dummy\_dataframe) =}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"period"}\NormalTok{,}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(dummy\_dataframe),}\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(}\KeywordTok{min}\NormalTok{(period)}\OperatorTok{:}\KeywordTok{max}\NormalTok{(period)))\{}
+\NormalTok{   k =}\StringTok{ }\NormalTok{(i }\OperatorTok{+}\StringTok{ }\KeywordTok{min}\NormalTok{(period) }\DecValTok{{-}1}\NormalTok{)}
+\NormalTok{   period\_dummy =}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"period"}\NormalTok{,i,}\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+\NormalTok{   dummy\_dataframe[,i] =}\StringTok{ }\NormalTok{(}\KeywordTok{assign}\NormalTok{(period\_dummy,}\KeywordTok{as.numeric}\NormalTok{(period }\OperatorTok{==}\StringTok{ }\NormalTok{k))) }
+\NormalTok{\}}
+
+
+
+\KeywordTok{lm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ dummy\_dataframe,}\DataTypeTok{formula =}\NormalTok{ logearnings\_rest }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{logminwage }\OperatorTok{+}\StringTok{ }\NormalTok{logearnings\_tot }\OperatorTok{+}\StringTok{ }\NormalTok{.)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = logearnings_rest ~ logminwage + logearnings_tot + 
+##     ., data = dummy_dataframe)
+## 
+## Coefficients:
+##     (Intercept)       logminwage  logearnings_tot          period1  
+##       1.0461973        0.4841454        0.5418954       -0.0117022  
+##         period2          period3          period4          period5  
+##      -0.0379120        0.0096442       -0.0368544       -0.0439516  
+##         period6          period7          period8          period9  
+##      -0.0540828       -0.0011221       -0.0528744       -0.0608269  
+##        period10         period11         period12         period13  
+##      -0.0423389       -0.0021580       -0.0538928       -0.0588076  
+##        period14         period15         period16         period17  
+##      -0.0359589       -0.0037129       -0.0380129       -0.0734469  
+##        period18         period19         period20         period21  
+##      -0.0261712        0.0134041       -0.0300735       -0.0493812  
+##        period22         period23         period24         period25  
+##      -0.0209259        0.0194947       -0.0289022       -0.0468806  
+##        period26         period27         period28         period29  
+##      -0.0159506        0.0288481       -0.0620302       -0.0776660  
+##        period30         period31         period32         period33  
+##      -0.0376042       -0.0268723       -0.0768065       -0.0784154  
+##        period34         period35         period36         period37  
+##      -0.0475149        0.0032291       -0.0484005       -0.0719876  
+##        period38         period39         period40         period41  
+##      -0.0333297        0.0035027       -0.0376056       -0.0602525  
+##        period42         period43         period44         period45  
+##      -0.0162025        0.0110575       -0.0307410       -0.0463679  
+##        period46         period47         period48         period49  
+##      -0.0140454        0.0217719       -0.0256609       -0.0381070  
+##        period50         period51         period52         period53  
+##      -0.0038756        0.0299994       -0.0154519       -0.0351850  
+##        period54         period55         period56         period57  
+##      -0.0006799        0.0321498       -0.0161864       -0.0184508  
+##        period58         period59         period60         period61  
+##       0.0016057        0.0299770       -0.0110195       -0.0350209  
+##        period62         period63         period64         period65  
+##       0.0029829        0.0333125       -0.0161822       -0.0275188  
+##        period66  
+##              NA
+\end{verbatim}
+
+\end{document}
