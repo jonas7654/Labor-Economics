@@ -129,7 +129,7 @@ The estimate for $\hat{\beta}_1$ is $0.06117$
 \
 The standard error for $\hat{\beta}_1$ is $0.00148$ and the t-statistic is $41.20$
 \
-We can see that $Pr(>|t|)$ is $0$ that means our p value is 0
+We can see that $Pr(>|t|)$ is $0$ that means our p-value is $\approx 0$
 \
 \
 According to the estimated $\hat{\beta}_1$ an one dollar increase in wage should result in an increase of hours worked of 0.0611
@@ -155,15 +155,14 @@ Now we want to estimate the log regression $$\log(\textrm{uhrswork}_i) = \beta_0
 ```{r}
 log_uhrswork = log(cps$uhrswork)
 log_wage = log(hourly_wage)
-log_regression1 = lm(log_uhrswork ~ log_wage);log_regression1
-sum_logreg1 = summary(log_regression1);sum_logreg1[4]
+log_regression1 = lm(log_uhrswork ~ log_wage);summary(log_regression1)[4]
 ```
 The estimate for $\hat{\beta}_1$ is $0.08245$
 \
 \
 The standard error for $\hat{\beta}_1$ is $0.00069$ and the t-statistic is $119.2211$
 \
-We can see that $Pr(>|t|)$ is $0$ that means our p value is 0
+We can see that $Pr(>|t|)$ is $0$ that means our p-value is $\approx 0$
 \
 \
 $e_{reg1} = 0.01992475$ \ vs. \ $e_{log(reg1)} = 0.08245$
@@ -185,16 +184,24 @@ cov(cov_dataframe,use = 'complete.obs')
 0.0053*(cov(log_wage,cps$age,use = 'complete.obs')/var(log_wage,na.rm = TRUE))
 ```
 \
-$$OVB = \beta_{age} \frac{Cov(log\_wage,age)}{\tilde{S}^2_{log\_wage}} = 0.0053 \frac{2.219}{0.997} = 0.012$$
+$$OVB = \beta_{age} \frac{Cov(log\_wage,age)}{Var(log\_wage)} = 0.0053 \frac{2.219}{0.997} = 0.012$$
 \
 We estimate the OVB to be around 0.012 i.e a elasticity change of 0.012
+\
+\
+\
+$$\hat{\beta} = \beta + \beta_{age} \frac{Cov(log\_wage,age)}{Var(log\_wage)} \Leftrightarrow \beta = \hat{\beta} -  \beta_{age} \frac{Cov(age,log\_wage)}{Var(log\_wage)} = 0.08245 - 0.012 = 0.07045$$
 \
 \
 \
 
 ### $g)$
 \
-$$\hat{\beta} = \beta + \beta_{age} \frac{Cov(log\_wage,age)}{\tilde{S}^2_{log\_wage}} \Leftrightarrow \beta = \hat{\beta} -  \beta_{age} \frac{Cov(age,log\_wage)}{\tilde{S}^2_{log\_wage}} = 0.08245 - 0.012 = 0.07045$$
+```{r}
+log_regression1_with_age = lm(log_uhrswork ~ log_wage + cps$age);summary(log_regression1_with_age)[4]
+```
+\
+We get almost the same coefficients
 \
 \
 \
@@ -203,13 +210,16 @@ $$\hat{\beta} = \beta + \beta_{age} \frac{Cov(log\_wage,age)}{\tilde{S}^2_{log\_
 \
 We want to estimate the model
 \
-$$\log(\textrm{uhrswork}_i) = \beta_0 + \beta_1 \log(\textrm{wage}_i) +\beta_2\textrm{edu_years} + \beta_3\textrm{age} + \beta_4 \textrm{age}^2 + \beta_5 \textrm{year} + \beta_6 \textrm{hisp} + \varepsilon_i$$
+$$\log(\textrm{uhrswork}_i) = \beta_0 + \beta_1 \log(\textrm{wage}_i) +\beta_2\textrm{edu_years} + \beta_3\textrm{age} + \beta_4 \textrm{age}^2 + \beta_5 \textrm{year} + \beta_6 \textrm{hisp} + \beta_7\textrm{nonwhite} + \varepsilon_i$$
 ```{r}
 age_squared = cps$age^2
-log_regression2 = lm(data = cps,formula = log_uhrswork ~ log_wage + edu_yrs + age + age_squared + year + hisp);log_regression2
+log_regression2 = lm(data = cps,formula = log_uhrswork ~ log_wage + edu_yrs + age + age_squared + year + hisp + nonwhite);summary(log_regression2)[4]
 ```
 \
-The estimated labor supply elasticity does not stay the same. We are now controlling for other variables. Therefore we are able to adress the omitted variable bias.
+The estimated labor supply elasticity does not stay the same. We are now controlling for other variables. Therefore we are able to adress the omitted variable bias. The elasticity shrinks to 0.066
+\
+Individuals with more education and who are older tend to work more.
+The coefficient on year is negative, suggesting people work fewer hours over time.
 \
 \
 \
@@ -218,7 +228,7 @@ The estimated labor supply elasticity does not stay the same. We are now control
 \
 Here we create a new DataFrame with all women with no childen which we access in the $lm()$ command.
 \
-*** Moreover we create new vectors for $\log(wage)$ , $\log(uhrswork)$ and $\textrm{age}^2$ conditioned on $nKids == 0$
+Moreover we create new vectors for $\log(wage)$ , $\log(uhrswork)$ and $\textrm{age}^2$ conditioned on $nKids == 0$
 \
 Note that I used a different approach to create the DataFrame and vectors using the package 'dplyr' which belongs to the 'tidyverse' package that we loaded at the beginning
 \
@@ -233,7 +243,7 @@ $$\textrm{log_wage_nochildren} = \log(\textrm{cps_nochildren \$ incwage / (52*cp
 $$...$$
 \
 \
-But using 'dplyr' makes the code much easier to read!
+But using 'dplyr' makes the code much easier to read.
 \
 ```{r}
 cps_nochildren = cps %>%
@@ -261,22 +271,22 @@ age_squared_nochildren = cps_nochildren %>%
 
 
 ```{r}
-log_regression_nochildren = lm(data = cps_nochildren,formula = log_uhrswork_nochildren ~ log_wage_nochildren + edu_yrs + age + age_squared_nochildren + year + hisp);log_regression_nochildren
+log_regression_nochildren = lm(data = cps_nochildren,formula = log_uhrswork_nochildren ~ log_wage_nochildren + edu_yrs + age + age_squared_nochildren + year + hisp + nonwhite);summary(log_regression_nochildren)[4]
 ```
 \
 ```{r}
 cps_children = cps %>%
-  filter(nKids > 1)
+  filter(nKids > 0)
 
 log_wage_children = cps %>%
-  filter(nKids > 1) %>%
+  filter(nKids > 0) %>%
   select(incwage,uhrswork) %>%
   transmute(log(incwage/(52*uhrswork))) %>%
   pull()
 
 
 log_uhrswork_children = cps %>%
-  filter(nKids > 1) %>%
+  filter(nKids > 0) %>%
   select(uhrswork) %>%
   transmute(log(uhrswork)) %>%
   pull()
@@ -288,7 +298,7 @@ age_squared_children = cps_children %>%
 ```
 
 ```{r}
-log_regression_children = lm(data = cps_children,formula = log_uhrswork_children ~ log_wage_children + edu_yrs + age + age_squared_children + year + hisp);log_regression_children
+log_regression_children = lm(data = cps_children,formula = log_uhrswork_children ~ log_wage_children + edu_yrs + age + age_squared_children + year + hisp + nonwhite);summary(log_regression_children)[4]
 ```
 \
 \
@@ -296,9 +306,17 @@ log_regression_children = lm(data = cps_children,formula = log_uhrswork_children
 
 ### $j)$
 \
-```{r}
+There are many possibilities here, the important thing is that you find a variable that is
+plausible and that you correctly figure out the direction of the bias.
+\
+One example for an omitted variable may be how monotonous a job is. Suppose some jobs
+are inherently more monotonous and therefore boring than others. E.g. working at an
+assembly line vs. working as a photographer. Suppose monotonous jobs pay less.
+$Cov(Monotonous,Wage)<0$, and people want to work less in monotonous jobs, so that the
+direct effect of monotonous Cov(hours, Monotonous) is negative. From the omitted variable
+bias formula, we can see that the bias term would therefore be positive and therefore the
+estimated elasticity would likely be larger than the true elasticity.
 
-```
 \
 \
 \
@@ -314,8 +332,6 @@ Load the corresponding dataset.
 dubelesterreich_minwage = read_dta(file = "~/Documents/Programming/R/Labor Economics [2020]/Data for PS2/dubelesterreich_minwage.dta")
 
 dubelesterreich_empdata = read_dta(file = "~/Documents/Programming/R/Labor Economics [2020]/Data for PS2/dubelesterreich_empdata.dta")
-
-dubelesterreich_empdata_contig_minwage = read_dta(file = "~/Documents/Programming/R/Labor Economics [2020]/Data for PS2/dubelesterreich_empdata_contig_minwage.dta")
 ```
 \
 \
@@ -348,9 +364,9 @@ minwage_clean = dubelesterreich_minwage %>%
 ```{r}
 summary(dubelesterreich_minwage$st_mw)
 summary(dubelesterreich_minwage$fed_mw)
-summary(minwage_clean)
+summary(minwage_clean$minwage)
 ```
-
+  
 
 \
 
@@ -393,6 +409,7 @@ mean_minwage_fed = data.frame(mean_fedwage,mean_minwage) %>%
 mean_minwage_plot = ggplot(mean_minwage) +
   geom_path(aes(x = year , y = mean),color = "dodgerblue4") +
   scale_x_continuous(breaks = scales::pretty_breaks(n = 5)) +
+  scale_y_continuous(limits = c(3,7) , breaks = scales::breaks_pretty(n = 5)) +
   ggtitle(label = "Average minimum wage by year") +
   ylab("") +
   xlab("Year") +
@@ -401,6 +418,7 @@ mean_minwage_plot = ggplot(mean_minwage) +
 mean_fed_minwage_plot = ggplot(mean_minwage_fed,aes(color = name)) +
   geom_path(aes(x = year , y = means)) +
   scale_x_continuous(breaks = scales::pretty_breaks(n = 5)) +
+  scale_y_continuous(limits = c(3,7) , breaks = scales::pretty_breaks(n = 5)) +
   ylab(label ="") +
   xlab(label = "Year") +
   ggtitle(label = "Average minimum wage and federal minimum wage by year") +
@@ -408,11 +426,8 @@ mean_fed_minwage_plot = ggplot(mean_minwage_fed,aes(color = name)) +
   theme_stata()
 ```
 \
-```{r , multi.col=TRUE}
-mean_minwage_plot
-
-
-mean_fed_minwage_plot
+```{r , multi.col=TRUE , fig.align="center"  ,fig.width = 12 , fig.height= 5}
+grid.arrange(mean_minwage_plot , mean_fed_minwage_plot ,ncol = 2)
 ```
 \
 \
@@ -443,10 +458,8 @@ mean_emp_totemp = data.frame(mean_emp_rest,mean_emp_tot) %>%
 
 mean_emp_totemp_plot = ggplot(mean_emp_totemp) +
   geom_point(aes(x = mean_emp_tot , y = mean_emp_rest),color = "dodgerblue4") +
-  scale_x_continuous(breaks = scales::breaks_pretty(n = 5)) +
+  scale_x_continuous(breaks = scales::breaks_pretty(n = 5) , labels = scales::comma) +
   theme_stata()
-
-mean_emp_totemp_plot
 ```
 \
 \
@@ -469,8 +482,12 @@ logmean_emp_totemp_plot = ggplot(logmean_emp_totemp) +
   scale_x_continuous(breaks = scales::breaks_pretty(n = 5)) +
   theme_stata()
 
-logmean_emp_totemp_plot
 ```
+\
+```{r ,fig.align="center"  ,fig.width = 12 , fig.height= 5}
+grid.arrange(mean_emp_totemp_plot , logmean_emp_totemp_plot , ncol = 2)
+```
+
 \
 \
 \
@@ -484,14 +501,14 @@ regression1 = lm(data = dubelesterreich_empdata , formula = emp_rest ~ emp_tot);
 regression2 = lm(data = dubelesterreich_empdata , formula = logemp_rest ~ logemp_tot);summary(regression2)
 ```
 \
-Regression 1:
+**Regression 1:**
 \
 for each additional job in a county there are about 0.059 additional restaurants
 \
 with a t-value of $1415.29$ the coefficient is statistically significant
 \
 \
-Regression 2:
+**Regression 2:**
 \
 If employment goes up by one percent restaurant employment goes up by $\approx 1$ percent 
 \
@@ -552,7 +569,7 @@ summary(log_regression1)[4]
 $\hat{\eta} = 0.5460$
 \
 \
-The coefficient is statistically significant with a t-value of $94.46$ and a p-value of $0$
+The coefficient is statistically significant with a t-value of $94.46$ and a p-value of $\approx0$
 \
 \
 \
@@ -567,8 +584,9 @@ In the Solution STATA omitted the variable 'period64'. To recreate the same coef
 ```{r}
 dummy_dataframe_period = as.data.frame(dummy(dubelesterreich_empdata_minwage$period));colnames(dummy_dataframe_period) = paste("period" , 1:66 , sep = "")
 
-dummy_regression1 = lm(data = select(dummy_dataframe_period,-period64),formula = dubelesterreich_empdata_minwage$logearnings_rest ~ dubelesterreich_empdata_minwage$logminwage + dubelesterreich_empdata_minwage$logearnings_tot + .);dummy_regression1$coefficients[c(2,3)]
+dummy_regression1 = lm(data = select(dummy_dataframe_period,-period64),formula = dubelesterreich_empdata_minwage$logearnings_rest ~ dubelesterreich_empdata_minwage$logminwage + dubelesterreich_empdata_minwage$logearnings_tot + .);dummy_regression1$coefficients[c(2,3,4)]
 ```
+I didn't print out every coefficient. You can do that by running: '$dummy\_regression1\$coefficients$'
 \
 \
 \
@@ -590,14 +608,13 @@ $$\textrm{dubelesterreich_empdata_minwage\$logearnings_rest ~ dubelesterreich_em
 $$\textrm{dubelesterreich_empdata_minwage\$logearnings_tot + .)}$$
 \
 \
-Using the package $plm$ makes this computation much faster and easier-
+Using the package $plm$ makes this computation much faster and easier.
 ```{r}
 library(plm)
 
 dummy_regression_period_county = plm(logearnings_rest ~ logminwage + logearnings_tot + dummy(period) , data=dubelesterreich_empdata_minwage, model="with" , index = "county")
 
 dummy_regression_period_county$coefficients[c(1,2)]
-
 ```
 
 
@@ -617,7 +634,9 @@ UI_RD = read_dta(file = "~/Documents/Programming/R/Labor Economics [2020]/Data f
 ```
 \
 \
-# Descriptive Analysis
+
+### Descriptive Analysis
+
 \
 $a)$
 \
@@ -746,10 +765,10 @@ uidata_temp_density = uidata_temp %>%
 
 
 ggplot(data = uidata_temp_density) +
-  geom_point(aes(x = agebins, y = n),color = "dodgerblue4") +
+  geom_point(aes(x = agebins, y = n),color = "dodgerblue4" , size = 0.75) +
   scale_y_continuous(limits = c(400,550)) +
   scale_x_continuous(limits = c(40,49.95),breaks = scales::breaks_pretty(n = 6)) +
-  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 1) +
+  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 0.5) +
   xlab("Age at UI Claim") +
   ylab("Frequency") +
   theme_stata()
@@ -775,8 +794,8 @@ uidata_temp_density2 = uidata_temp %>%
             n = sum(N))
 
 ggplot(data = uidata_temp_density2) +
-  geom_point(aes(x = agebins2, y = mean_durnonemp),color = "dodgerblue4") +
-  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 1) +
+  geom_point(aes(x = agebins2, y = mean_durnonemp),color = "dodgerblue4" , size = 0.75) +
+  geom_vline(xintercept = c(42,44,49),color = "firebrick4", size = 0.5) +
   scale_x_continuous(limits = c(40,49.73) , breaks = scales::breaks_pretty(n = 6)) +
   xlab("Age at UI Claim") +
   ylab("Unemployment Duration") +
@@ -811,41 +830,44 @@ uidata_temp_density3 = uidata_temp %>%
             n = sum(N))
 
 plot_expbaseline = ggplot(data = uidata_temp_density3) +
-  geom_point(aes(x = agebins2, y = mean_expbaseline),color = "dodgerblue4") +
-  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 1) +
+  geom_point(aes(x = agebins2, y = mean_expbaseline),color = "dodgerblue4" , size = 0.75) +
+  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 0.5) +
   scale_x_continuous(limits = c(40,49.73) , breaks = scales::breaks_pretty(n = 6)) +
+  scale_y_continuous(limits = c(66,67.51) , breaks = scales::breaks_pretty(n = 4)) +
   xlab("Age at UI Claim") +
   ylab("Number of Months worked in previous 7 years") +
   theme_stata()
   
 
 plot_edyrs = ggplot(data = uidata_temp_density3) +
-  geom_point(aes(x = agebins2, y = mean_edyrs),color = "dodgerblue4") +
-  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 1) +
+  geom_point(aes(x = agebins2, y = mean_edyrs),color = "dodgerblue4" , size = 0.75) +
+  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 0.5) +
   scale_x_continuous(limits = c(40,49.73) , breaks = scales::breaks_pretty(n = 6)) +
-  xlab("Age at UI Claim") +
+  scale_y_continuous(limits = c(11.35,11.625) , breaks = scales::breaks_pretty(n = 6)) +
   ylab("Years of Schooling") +
   theme_stata()
 
 plot_female = ggplot(data = uidata_temp_density3) +
-  geom_point(aes(x = agebins2, y = mean_female),color = "dodgerblue4") +
-  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 1) +
+  geom_point(aes(x = agebins2, y = mean_female),color = "dodgerblue4" , size = 0.75) +
+  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 0.5) +
   scale_x_continuous(limits = c(40,49.73) , breaks = scales::breaks_pretty(n = 6)) +
+  scale_y_continuous(limits = c(0.32,0.381), breaks = scales::breaks_pretty(n = 4)) +
   xlab("Age at UI Claim") +
   ylab("Female") +
   theme_stata()
 
 plot_tenure = ggplot(data = uidata_temp_density3) +
-  geom_point(aes(x = agebins2, y = mean_tenure),color = "dodgerblue4") +
-  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 1) +
+  geom_point(aes(x = agebins2, y = mean_tenure),color = "dodgerblue4" , size = 0.75) +
+  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 0.5) +
   scale_x_continuous(limits = c(40,49.73) , breaks = scales::breaks_pretty(n = 6)) +
+  scale_y_continuous(limits = c(5.6,6.4) , breaks = scales::breaks_pretty(n = 5)) +
   xlab("Age at UI Claim") +
   ylab("Tenure at last Employer") +
   theme_stata()
 ```
 \
-```{r  , out.width = "1000"}
-grid.arrange(plot_expbaseline,plot_edyrs,ncol = 2)
+```{r  , multi.col=TRUE , fig.align="center"  ,fig.width = 12 , fig.height= 8}
+grid.arrange(plot_expbaseline,plot_edyrs,plot_female,plot_tenure, nrow = 2,ncol = 2)
 ```
 
 $d)$
