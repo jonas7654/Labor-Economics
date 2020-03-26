@@ -386,6 +386,7 @@ summary {
 <li><a href="#estimating-the-intensive-margin-labor-supply-elasticity">Estimating the intensive margin labor supply elasticity</a></li>
 <li><a href="#minimum-wage-application">Minimum Wage Application</a></li>
 <li><a href="#estimating-the-effect-of-minimum-wages">Estimating the Effect of Minimum Wages</a></li>
+<li><a href="#unemployment-insurance-extension">Unemployment Insurance Extension</a></li>
 </ul>
 </div>
 
@@ -1038,8 +1039,8 @@ The coefficient is statistically significant with a t-value of <span class="math
 <h3><span class="math inline">\(b)\)</span></h3>
 <p><br />
 <br />
-Since there is a multicollinearity issue within the period columns R will omitt one of the variables so that <span class="math inline">\((\mathrm{X&#39;X})^{-1}\)</span> is invertible.<br />
-In the Solution STATA omitted the variable ‘period64’. To recreate the same coefficients I have also removed the variable ‘period64’ from the dummy dataframe.<br />
+Since there is a multicollinearity issue within the period columns R will omit one of the variables so that <span class="math inline">\((\mathrm{X&#39;X})^{-1}\)</span> is invertible.<br />
+In the solution sheet STATA omitted the variable ‘period64’. To recreate the same coefficients I have also removed the variable ‘period64’ from the dummy dataframe.<br />
 </p>
 <pre class="r"><code>dummy_dataframe_period = as.data.frame(dummy(dubelesterreich_empdata_minwage$period));colnames(dummy_dataframe_period) = paste(&quot;period&quot; , 1:66 , sep = &quot;&quot;)</code></pre>
 <pre><code>## Warning in model.matrix.default(~x - 1, model.frame(~x - 1), contrasts = FALSE):
@@ -1082,8 +1083,9 @@ Using the package <span class="math inline">\(plm\)</span> makes this computatio
 <br />
 </p>
 </div>
-<div id="unemployment-insurance-extension" class="section level3">
-<h3>Unemployment Insurance Extension</h3>
+</div>
+<div id="unemployment-insurance-extension" class="section level1">
+<h1>Unemployment Insurance Extension</h1>
 <p><br />
 <br />
 <br />
@@ -1093,9 +1095,8 @@ Load the dataset<br />
 <p><br />
 <br />
 </p>
-</div>
 <div id="descriptive-analysis" class="section level3">
-<h3>Descriptive Analysis</h3>
+<h3>1. Descriptive Analysis</h3>
 <p><br />
 <span class="math inline">\(a)\)</span><br />
 </p>

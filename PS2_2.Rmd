@@ -577,9 +577,9 @@ The coefficient is statistically significant with a t-value of $94.46$ and a p-v
 ### $b)$
 \
 \
-Since there is a multicollinearity issue within the period columns R will omitt one of the variables so that $(\mathrm{X'X})^{-1}$ is invertible.
+Since there is a multicollinearity issue within the period columns R will omit one of the variables so that $(\mathrm{X'X})^{-1}$ is invertible.
 \
-In the Solution STATA omitted the variable 'period64'. To recreate the same coefficients I have also removed the variable 'period64' from the dummy dataframe.
+In the solution sheet STATA omitted the variable 'period64'. To recreate the same coefficients I have also removed the variable 'period64' from the dummy dataframe.
 \
 ```{r}
 dummy_dataframe_period = as.data.frame(dummy(dubelesterreich_empdata_minwage$period));colnames(dummy_dataframe_period) = paste("period" , 1:66 , sep = "")
@@ -623,7 +623,8 @@ dummy_regression_period_county$coefficients[c(1,2)]
 \
 \
 
-### Unemployment Insurance Extension
+# Unemployment Insurance Extension
+
 \
 \
 \
@@ -635,7 +636,7 @@ UI_RD = read_dta(file = "~/Documents/Programming/R/Labor Economics [2020]/Data f
 \
 \
 
-### Descriptive Analysis
+### 1. Descriptive Analysis
 
 \
 $a)$
