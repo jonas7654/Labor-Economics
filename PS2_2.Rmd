@@ -7,17 +7,9 @@ output:
     toc: true
     toc_depth: 1
     number_sections: false
----
-\
-\
-\
 
-\
-\
-\
-\
-![wqewqewqeqwewqewqe text](/home/jonas/Downloads/Uni_Mannheim_Siegel.svg)
-\
+
+---
 \
 \
 \
@@ -33,9 +25,12 @@ Load helpful packages and the cps dataset
 library(tidyverse)
 library(haven)
 library(ggthemes)
+library(dummies)
 library(gridExtra)
 
-cps = read_dta(file = '~/Documents/Programming/R/Labor Economics [2020]//Data for PS2/cps-1984-2010.dta')
+
+
+cps = read_dta(file = '~/Documents/Programming/R/Labor Economics [2020]/Data for PS2/cps-1984-2010.dta')
 
 ```
 \
@@ -92,16 +87,21 @@ sum(hourly_wage == 'NaN')
 ```{r}
 mean(cps$emp_ind)
 mean(cps$emp_ind[cps$nKids == 0])
-mean(cps$emp_ind[cps$nKids == 1 & 2])
+mean(cps$emp_ind[cps$nKids == 1])
+mean(cps$emp_ind[cps$nKids == 2])
+
 
 ```
-The overall rate of labor force participation is or $74.41$%
+The overall rate of labor force participation is $74.41$%
 \
 \
-The rate of labor force participation among women who have no children is or $78.59$%
+The rate of labor force participation among women who have no children is $78.59$%
 \
 \
-The rate for 1 or 2 children is or $71.78$%
+The rate for 1 children is $71.78$%
+\
+\
+The rate for 2 children is $67.74$
 \
 \
 The rate of labor force participation among women with 10 children is very high because of the amount of women who have 10 children.
@@ -127,7 +127,7 @@ sum_reg1 = summary(regression1);summary(regression1)[4]
 The estimate for $\hat{\beta}_1$ is $0.06117$
 \
 \
-The standard error for $\hat{\beta}_1$ is $0.0014$ and the t-statistic is $41.20$
+The standard error for $\hat{\beta}_1$ is $0.00148$ and the t-statistic is $41.20$
 \
 We can see that $Pr(>|t|)$ is $0$ that means our p value is 0
 \
@@ -138,11 +138,13 @@ According to the estimated $\hat{\beta}_1$ an one dollar increase in wage should
 Now estimate the elasticity of hours worked with respect to wage
 ```{r}
 avg_hourly_wage = mean(hourly_wage,na.rm = TRUE)
+
 avg_uhrswork = mean(cps$uhrswork)
+
 regression1$coefficients[2]*(avg_hourly_wage/avg_uhrswork)
 ```
 
-The estimated elasticity $e$ is equal to $0.0199$
+The estimated elasticity $e$ is equal to $0.0199 \approx 0.02$
 \
 \
 \
@@ -167,7 +169,7 @@ We can see that $Pr(>|t|)$ is $0$ that means our p value is 0
 $e_{reg1} = 0.01992475$ \ vs. \ $e_{log(reg1)} = 0.08245$
 \
 \
-If the wage increases by $10$% we would estimate the effect on hours worked to be $10 \times 0.08245 = 0.8245$
+If the wage increases by $10\%$ hours worked would increase by $10 \times 0.08245\ = 0.8245\%$
 \
 \
 \
@@ -339,19 +341,21 @@ for (i in 1:length(t(minwage))){
   }
 }
 
-dubelesterreich_minwage = dubelesterreich_minwage %>%
+minwage_clean = dubelesterreich_minwage %>%
   add_column(minwage)
 ```
 \
 ```{r}
 summary(dubelesterreich_minwage$st_mw)
 summary(dubelesterreich_minwage$fed_mw)
-summary(minwage)
+summary(minwage_clean)
 ```
 
 
 \
-$a)  \  \ \ \textrm{&} \ \ \ b)$
+
+### $a)  \  \ \ \textrm{&} \ \ \ b)$
+
 \
 $\min = 3.350$
 \
@@ -361,21 +365,23 @@ $\max = 7.930$
 \
 Save the minwage vector as a file.
 ```{r}
-write_dta(as.data.frame(minwage),path = "~/Documents/Programming/R/Labor Economics [2020]/minwage_clean.dta")
+write_dta(as.data.frame(minwage_clean),path = "~/Documents/Programming/R/Labor Economics [2020]/minwage_clean.dta")
 ```
 \
 \
-$c)$
+
+### $c)$
+
 \
 ```{r}
 
 
-mean_minwage = dubelesterreich_minwage %>%
+mean_minwage = minwage_clean %>%
   group_by(year) %>%
   arrange(year) %>%
   summarise(mean = mean(minwage))
 
-mean_fedwage = dubelesterreich_minwage %>%
+mean_fedwage = minwage_clean %>%
   group_by(year) %>%
   arrange(year) %>%
   summarise(mean_fed = mean(fed_mw))
@@ -385,7 +391,7 @@ mean_minwage_fed = data.frame(mean_fedwage,mean_minwage) %>%
   pivot_longer(cols = c("mean_fed","mean"));colnames(mean_minwage_fed)[3] = "means"
 
 mean_minwage_plot = ggplot(mean_minwage) +
-  geom_path(aes(x = year , y = mean),color = "deepskyblue3") +
+  geom_path(aes(x = year , y = mean),color = "dodgerblue4") +
   scale_x_continuous(breaks = scales::pretty_breaks(n = 5)) +
   ggtitle(label = "Average minimum wage by year") +
   ylab("") +
@@ -398,7 +404,7 @@ mean_fed_minwage_plot = ggplot(mean_minwage_fed,aes(color = name)) +
   ylab(label ="") +
   xlab(label = "Year") +
   ggtitle(label = "Average minimum wage and federal minimum wage by year") +
-  scale_color_manual(name="",labels=c("Average minimum wage","Federal minimum wage"),values=c("deepskyblue3","red")) +
+  scale_color_manual(name="",labels=c("Average minimum wage","Federal minimum wage"),values=c("dodgerblue4","red")) +
   theme_stata()
 ```
 \
@@ -411,9 +417,11 @@ mean_fed_minwage_plot
 \
 \
 \
-$d)$
+
+### $d)$
+
 \
-Filter for year = 2000
+Filter for year == 2000
 \
 ```{r}
 dubelesterreich_empdata_2000 = dubelesterreich_empdata %>%
@@ -434,7 +442,7 @@ mean_emp_totemp = data.frame(mean_emp_rest,mean_emp_tot) %>%
   select(-c("state","state.1"))
 
 mean_emp_totemp_plot = ggplot(mean_emp_totemp) +
-  geom_point(aes(x = mean_emp_tot , y = mean_emp_rest),color = "deepskyblue3") +
+  geom_point(aes(x = mean_emp_tot , y = mean_emp_rest),color = "dodgerblue4") +
   scale_x_continuous(breaks = scales::breaks_pretty(n = 5)) +
   theme_stata()
 
@@ -457,11 +465,56 @@ logmean_emp_totemp = data.frame(logmean_emp_rest,logmean_emp_tot) %>%
   select(-c("state","state.1"))
 
 logmean_emp_totemp_plot = ggplot(logmean_emp_totemp) +
-  geom_point(aes(x = logmean_emp_tot , y = logmean_emp_rest),color = "deepskyblue3") +
+  geom_point(aes(x = logmean_emp_tot , y = logmean_emp_rest),color = "dodgerblue4") +
   scale_x_continuous(breaks = scales::breaks_pretty(n = 5)) +
   theme_stata()
 
 logmean_emp_totemp_plot
+```
+\
+\
+\
+
+### $e)$
+
+\
+```{r}
+regression1 = lm(data = dubelesterreich_empdata , formula = emp_rest ~ emp_tot);summary(regression1)
+
+regression2 = lm(data = dubelesterreich_empdata , formula = logemp_rest ~ logemp_tot);summary(regression2)
+```
+\
+Regression 1:
+\
+for each additional job in a county there are about 0.059 additional restaurants
+\
+with a t-value of $1415.29$ the coefficient is statistically significant
+\
+\
+Regression 2:
+\
+If employment goes up by one percent restaurant employment goes up by $\approx 1$ percent 
+\
+\
+\
+
+### $f)$
+\
+
+```{r}
+minwage_clean = minwage_clean %>%
+  select(state,period,minwage)
+  
+dubelesterreich_empdata = merge(dubelesterreich_empdata,minwage_clean,by = c("state","period"))
+
+
+dubelesterreich_empdata_minwage = dubelesterreich_empdata %>%
+  mutate(minwage = replace(minwage,year == 2004 & county == 6075,8.5)) %>%
+  mutate(minwage = replace(minwage,year == 2005 & county == 6075,8.62)) %>%
+  mutate(minwage = replace(minwage,year == 2006 & county == 6075, 8.82)) %>%
+  mutate(logminwage = log(minwage))
+
+write_dta(dubelesterreich_empdata , path = "~/Documents/Programming/R/Labor Economics [2020]/dubelesterreich_empdata_minwage.dta")
 ```
 
 \
@@ -470,16 +523,6 @@ logmean_emp_totemp_plot
 
 # Estimating the Effect of Minimum Wages
 \
-\
-Load the corresponding dataset.
-\
-I have also removed all other variables created for Part 1 of this Problem Set to have a cleaner workspace.
-\
-```{r}
-rm(list = ls())
-
-empdata_minwage = read_dta(file = "~/Documents/Programming/R/Labor Economics [2020]/Data for PS2/dubelesterreich_empdata_contig_minwage.dta")
-```
 \
 \
 \
@@ -501,12 +544,12 @@ First we want to estimate
 $$\log(\textrm{earnings_rest}) = \alpha + \eta\log(\textrm{minwage}) + \delta\log(\textrm{earnings_tot}) + \varepsilon_{it}$$
 \
 ```{r}
-log_regression1 = lm(data = empdata_minwage, formula = logearnings_rest ~ logminwage + logearnings_tot);log_regression1
+log_regression1 = lm(data = dubelesterreich_empdata_minwage, formula = logearnings_rest ~ logminwage + logearnings_tot);log_regression1
 
 summary(log_regression1)[4]
 ```
 \
-$\hat{\eta} = 0.5042$
+$\hat{\eta} = 0.5460$
 \
 \
 The coefficient is statistically significant with a t-value of $94.46$ and a p-value of $0$
@@ -516,26 +559,307 @@ The coefficient is statistically significant with a t-value of $94.46$ and a p-v
 
 ### $b)$
 \
+\
+Since there is a multicollinearity issue within the period columns R will omitt one of the variables so that $(\mathrm{X'X})^{-1}$ is invertible.
+\
+In the Solution STATA omitted the variable 'period64'. To recreate the same coefficients I have also removed the variable 'period64' from the dummy dataframe.
+\
 ```{r}
-attach(empdata_minwage)
+dummy_dataframe_period = as.data.frame(dummy(dubelesterreich_empdata_minwage$period));colnames(dummy_dataframe_period) = paste("period" , 1:66 , sep = "")
 
-period = empdata_minwage %>%
-  select(period)
+dummy_regression1 = lm(data = select(dummy_dataframe_period,-period64),formula = dubelesterreich_empdata_minwage$logearnings_rest ~ dubelesterreich_empdata_minwage$logminwage + dubelesterreich_empdata_minwage$logearnings_tot + .);dummy_regression1$coefficients[c(2,3)]
+```
+\
+\
+\
+Now we want to include the county fixed effects.
+\
+Note that we could use the same procedure as before. This would take relatively long to compute and is memory heavy.
+\
+The corresponding code would be :
+\
+\
 
-dummy_dataframe = as.data.frame(matrix(nrow = length(t(period)),ncol = length(min(period):max(period))))
-colnames(dummy_dataframe) = paste("period",1:length(dummy_dataframe),sep = "")
+$$\textrm{dummy_dataframe_county = as.data.frame(dummy(dubelesterreich_empdata_minwage\$county))}$$
+\
+$$\textrm{dummy_dataframe_county_period = data.frame(dummy_dataframe_period , dummy_dataframe_county)
+}$$
+\
+$$\textrm{dummy_reg_county_period = lm(data = dummy_dataframe_county_period , formula =}$$
+$$\textrm{dubelesterreich_empdata_minwage\$logearnings_rest ~ dubelesterreich_empdata_minwage\$logminwage +}$$
+$$\textrm{dubelesterreich_empdata_minwage\$logearnings_tot + .)}$$
+\
+\
+Using the package $plm$ makes this computation much faster and easier-
+```{r}
+library(plm)
 
+dummy_regression_period_county = plm(logearnings_rest ~ logminwage + logearnings_tot + dummy(period) , data=dubelesterreich_empdata_minwage, model="with" , index = "county")
 
-for (i in 1:length(min(period):max(period))){
-   k = (i + min(period) -1)
-   period_dummy = paste("period",i,sep = "")
-   dummy_dataframe[,i] = (assign(period_dummy,as.numeric(period == k))) 
-}
+dummy_regression_period_county$coefficients[c(1,2)]
 
-
-
-lm(data = dummy_dataframe,formula = logearnings_rest ~ logminwage + logearnings_tot + .)
 ```
 
+
+
+\
+\
+\
+
+### Unemployment Insurance Extension
+\
+\
+\
+Load the dataset
+\
+```{r}
+UI_RD = read_dta(file = "~/Documents/Programming/R/Labor Economics [2020]/Data for PS2/UI_RD.dta")
+```
+\
+\
+# Descriptive Analysis
+\
+$a)$
+\
+```{r}
+summary(UI_RD)
+```
+\
+\
+$b)$
+\
+```{r , fig.align="center"}
+ui_p_mean_per_age = UI_RD %>%
+  group_by(age) %>%
+  summarise(mean_P = mean(P))
+
+ui_p_mean_per_age_plot = ggplot(data = ui_p_mean_per_age) +
+  geom_line(aes(x = age , y = mean_P ),color = "dodgerblue4") +
+  xlab("Age") +
+  ylab("Potential UI Duration") +
+  ggtitle(label = "Potential UI Duration by Age") +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 5)) +
+  theme_stata()
+
+ui_p_mean_per_age_plot
+
+```
+\
+\
+$c)$
+\
+```{r , fig.align="center"}
+ui_p_mean_per_age_exp52 = UI_RD %>%
+  filter(expbaseline >= 52) %>%
+  group_by(age) %>%
+  summarise(mean_P = mean(P))
+
+ui_p_mean_per_age_exp52_plot = ggplot(data = ui_p_mean_per_age_exp52) +
+  geom_line(aes(x = age , y = mean_P ),color = "dodgerblue4") +
+  xlab("Age") +
+  ylab("Potential UI Duration") +
+  ggtitle(label = "Potential UI Duration by Age") +
+  scale_y_continuous(breaks = c(10,15,20,25),limits = c(10,26)) +
+  theme_stata()
+
+ui_p_mean_per_age_exp52_plot
+```
+\
+\
+\
+
+### 2. OLS Analysis
+
+\
+$a)$
+\
+```{r , include=TRUE, message=FALSE}
+library(estout)
+UI_regression1 = lm(data = UI_RD , formula = durnonemp ~ P)
+UI_regression2 = lm(data = UI_RD , formula = durnonemp ~ P + agedays)
+UI_regression3 = lm(data = UI_RD , formula = durnonemp ~ P + agedays + edyrs + female + nonger + tenure)
+UI_regression4 = lm(data = UI_RD , formula = durnonemp ~ P + agedays + edyrs + female + nonger + tenure + realgdpgrowthf1 + unemp)
+```
+\
+\
+Here I use the package $estout$ to export a $\LaTeX$ regression table.
+\
+I exported the table and included it as an image in this document.
+\
+```{r}
+estclear()
+eststo(UI_regression1)
+eststo(UI_regression2)
+eststo(UI_regression3)
+eststo(UI_regression4)
+esttab(round.dec = 5 ,filename = "/home/jonas/Documents/Programming/R/Labor Economics [2020]/UI_table")
+```
+\
+```{r , out.width = "500px" , fig.align="center" , echo=FALSE}
+knitr::include_graphics("/home/jonas/Documents/Programming/R/Labor Economics [2020]/UI_table/UI_table-1.jpg")
+```
+
+
+\
+$b)$
+\
+Including Age in the regression changes the $\beta_P$ coefficient from positive to negative.
+\
+An additional month of UI would reduce the unemployement duration by 0.2 month.
+This is the opposite of what theory would predict
+\
+\
+$c)$
+\
+Note that potential UI duration might be related to positive worker characteristics.
+Worker who are older and had more employment in the past 7 years (one of the criteria
+to be eligible for higher P) might be more employable in general and might have an
+easier time finding a job.
+\
+\
+\
+
+### 3. Regression Discontinuity Design
+
+\
+\
+\
+$a)$
+\
+```{r , fig.align="center" }
+uidata_temp = UI_RD %>%
+  filter(expbaseline >= 52)
+
+
+agebins = floor((uidata_temp$agedays - (42*365.25))/15)/(365.25/15)+42
+
+N = rep(1,length(agebins))
+
+uidata_temp_density = uidata_temp %>%
+  add_column(agebins,N) %>%
+  select(durnonemp,duruib,age,agebins,N) %>%
+  group_by(agebins) %>%
+  summarise(mean_durnonemp = mean(durnonemp),
+            mean_duruib = mean(duruib), 
+            mean_age = mean(age) ,
+            n = sum(N))
+
+
+ggplot(data = uidata_temp_density) +
+  geom_point(aes(x = agebins, y = n),color = "dodgerblue4") +
+  scale_y_continuous(limits = c(400,550)) +
+  scale_x_continuous(limits = c(40,49.95),breaks = scales::breaks_pretty(n = 6)) +
+  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 1) +
+  xlab("Age at UI Claim") +
+  ylab("Frequency") +
+  theme_stata()
+
+```
+\
+\
+\
+$b)$
+\
+
+```{r , fig.align="center"}
+
+agebins2 = floor((uidata_temp$agedays - (42*365.25))/60)/(365.25/60)+42
+
+uidata_temp_density2 = uidata_temp %>%
+  add_column(agebins2,N) %>%
+  select(durnonemp,duruib,age,agebins2,N) %>%
+  group_by(agebins2) %>%
+  summarise(mean_durnonemp = mean(durnonemp),
+            mean_duruib = mean(duruib), 
+            mean_age = mean(age) ,
+            n = sum(N))
+
+ggplot(data = uidata_temp_density2) +
+  geom_point(aes(x = agebins2, y = mean_durnonemp),color = "dodgerblue4") +
+  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 1) +
+  scale_x_continuous(limits = c(40,49.73) , breaks = scales::breaks_pretty(n = 6)) +
+  xlab("Age at UI Claim") +
+  ylab("Unemployment Duration") +
+  theme_stata()
+
+
+```
+\
+The following figure shows that there is a clear increase in unemployment durations
+at the thresholds. This is the main outcome of interest and suggests that potential UI
+durations do have a positive effect on unemployment durations. At the 42 cutoff it looks
+like the 6 additional months of UI increase unemployment duration by a bit less than a
+year.
+\
+\
+\
+$c)$
+\
+```{r}
+
+uidata_temp_density3 = uidata_temp %>%
+  add_column(agebins2,N) %>%
+  select(durnonemp,duruib,age,expbaseline,edyrs,female,tenure,agebins2,N) %>%
+  group_by(agebins2) %>%
+  summarise(mean_durnonemp = mean(durnonemp),
+            mean_duruib = mean(duruib), 
+            mean_age = mean(age),
+            mean_expbaseline = mean(expbaseline),
+            mean_edyrs = mean(edyrs),
+            mean_female = mean(female),
+            mean_tenure = mean(tenure),
+            n = sum(N))
+
+plot_expbaseline = ggplot(data = uidata_temp_density3) +
+  geom_point(aes(x = agebins2, y = mean_expbaseline),color = "dodgerblue4") +
+  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 1) +
+  scale_x_continuous(limits = c(40,49.73) , breaks = scales::breaks_pretty(n = 6)) +
+  xlab("Age at UI Claim") +
+  ylab("Number of Months worked in previous 7 years") +
+  theme_stata()
+  
+
+plot_edyrs = ggplot(data = uidata_temp_density3) +
+  geom_point(aes(x = agebins2, y = mean_edyrs),color = "dodgerblue4") +
+  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 1) +
+  scale_x_continuous(limits = c(40,49.73) , breaks = scales::breaks_pretty(n = 6)) +
+  xlab("Age at UI Claim") +
+  ylab("Years of Schooling") +
+  theme_stata()
+
+plot_female = ggplot(data = uidata_temp_density3) +
+  geom_point(aes(x = agebins2, y = mean_female),color = "dodgerblue4") +
+  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 1) +
+  scale_x_continuous(limits = c(40,49.73) , breaks = scales::breaks_pretty(n = 6)) +
+  xlab("Age at UI Claim") +
+  ylab("Female") +
+  theme_stata()
+
+plot_tenure = ggplot(data = uidata_temp_density3) +
+  geom_point(aes(x = agebins2, y = mean_tenure),color = "dodgerblue4") +
+  geom_vline(xintercept = c(42,44,49),color = "firebrick4",size = 1) +
+  scale_x_continuous(limits = c(40,49.73) , breaks = scales::breaks_pretty(n = 6)) +
+  xlab("Age at UI Claim") +
+  ylab("Tenure at last Employer") +
+  theme_stata()
+```
+\
+```{r  , out.width = "1000"}
+grid.arrange(plot_expbaseline,plot_edyrs,ncol = 2)
+```
+
+$d)$
+\
+```{r}
+ui_data_age = UI_RD %>%
+  filter(age >= 40 & age < 44 & expbaseline >= 52) %>%
+  mutate(a0 = agedays-(42*365.25)) %>%
+  mutate(RD = as.numeric(age >= 42)) %>%
+  mutate(a1 = a0 * RD)
+
+UI_regression5 = lm(data = ui_data_age , formula = durnonemp ~ P + a0 + a1);summary(UI_regression5)
+
+
+```
 
 
